@@ -1,0 +1,19 @@
+{
+  "name": "jackalrss",
+  "version": "0.0.1",
+  "description": "MERN Based RSS Reader",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VanJackal/JackalRSS.git"
+  },
+  "author": "VanJackal",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/VanJackal/JackalRSS/issues"
+  },
+  "homepage": "https://github.com/VanJackal/JackalRSS#readme"
+}

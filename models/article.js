@@ -5,7 +5,7 @@ const ArticleSchema = new Schema({
 	feedid:{
 		type: String,
 		required: true
-	}
+	},
 	title:{
         type: String,
         required: true

@@ -20,4 +20,8 @@ router.put('/articles/:id', (req, res, next) => { // sets the readstate of the a
 
 });
 
+router.delete('/articles/:id', (req, res, next) => {
+	Article.findByIdAndDelete(req.params.id).then(data => res.json(data));
+});
+
 module.exports = router;

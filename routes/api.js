@@ -13,7 +13,7 @@ router.post('/articles', (req, res, next) => {
 });
 
 router.get('/articles/:id', (req, res, next) => { // Gets full info of the article with the given id
-
+	Article.findById(req.params.id).then(data => res.json(data));
 });
 
 router.put('/articles/:id', (req, res, next) => { // sets the readstate of the article with the given id

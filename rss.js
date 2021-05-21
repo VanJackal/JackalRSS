@@ -1,7 +1,5 @@
 const Parser = require('rss-parser');
-const parser = new Parser({customFields:{
-	item:["description"]
-}});
+const parser = new Parser();
 const Article = require('./models/article');
 
 async function fetchFeed(url){
@@ -12,11 +10,11 @@ async function fetchFeed(url){
 		Article.create({
 			feedid:"TestFeed",// Feed for testing (temp)
 			title:item.title,
-			description:item.description,
+			description:item.content,
 			pubDate:item?.pubDate,
 			link:item?.link,
 			enclosure:item?.enclosure,
-			content:item?.content
+			//content:item?.nothing
 		});
 		numArticles++;
 	});

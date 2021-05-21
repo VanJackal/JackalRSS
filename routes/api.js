@@ -8,7 +8,6 @@ router.get('/articles', (req, res, next) => { // Gets(including fetching new art
 });
 
 router.post('/articles', (req, res, next) => {
-    //console.log(req.body.url);
     rss.fetchFeed(req.body.url).then(data => res.json(data));
 });
 
@@ -16,8 +15,8 @@ router.get('/articles/:id', (req, res, next) => { // Gets full info of the artic
 	Article.findById(req.params.id).then(data => res.json(data));
 });
 
-router.put('/articles/:id', (req, res, next) => { // sets the readstate of the article with the given id
-
+router.put('/articles/:id', (req, res, next) => { // sets the readstate of the article with the given id (can also be used to update an entry)
+	Article.findByIdAndUpdate(req.params.id,req.body).then(data => res.json(data));
 });
 
 router.delete('/articles/:id', (req, res, next) => {

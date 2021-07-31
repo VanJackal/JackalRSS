@@ -17,9 +17,9 @@
   },
   "homepage": "https://github.com/VanJackal/JackalRSS#readme",
   "dependencies": {
-    "dotenv": "^9.0.0",
+    "dotenv": "^9.0.2",
     "express": "^4.17.1",
-    "mongoose": "^5.12.7",
+    "mongoose": "^5.13.5",
     "rss-parser": "^3.12.0"
   }
 }

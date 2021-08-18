@@ -20,7 +20,7 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-app.use('/api', routes);
+app.use('/', routes);
 
 app.use((err, req, res, next) => {
     console.log(err);

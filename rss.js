@@ -24,11 +24,8 @@ async function fetchFeed(url) {
 		uuids.push(article.uuid);
 		articles.push(article);
 	});
-	console.log(uuids)
-	let existing = await Article.find({ uuid: { "$in": uuids } }, { uuid: 1 });//Get existing article ids
-	console.log(existing)
+	let existing = (await Article.find({ uuid: { "$in": uuids } }, { uuid: 1 })).map(a => a.uuid);//Get existing article ids
 	let newArticles = articles.filter(item => !existing.includes(item.uuid));//get array of only new articles
-	console.log(newArticles)
 	await Article.insertMany(newArticles);//add new articles to db
 
 	return { new: newArticles.length };

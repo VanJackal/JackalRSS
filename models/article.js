@@ -26,6 +26,10 @@ const ArticleSchema = new Schema({
 	},
 	content:{
 		type: String
+	},
+	uuid:{
+		type:String,
+		required: true
 	}
 });
 

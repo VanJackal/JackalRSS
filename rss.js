@@ -8,20 +8,22 @@ async function fetchFeed(url) {
 	let articles = [];
 	let uuids = [];
 	console.log(feed.title);
+
 	feed.items.forEach(item => {
+		let feedid = "TestFeed";//temp
+		let keyString = item.title + item.content + item?.link + item?.enclosure;
+		let uuid = crypto.createHash("sha1").update(keyString).digest('base64');
+		uuids.push(uuid);
 		let article = {
-			feedid: "TestFeed",// Feed for testing (temp)
+			feedid: feedid,
 			title: item.title,
 			description: item.content,
 			pubDate: item?.pubDate,
 			link: item?.link,
 			enclosure: item?.enclosure,
-			//content:item?.nothing
+			uuid:uuid,
 		};
-		let keyString = article.feedid + article.title + article.description + article.pubDate + article.link + article.enclosure;
 
-		article.uuid = crypto.createHash("sha1").update(keyString).digest('base64');
-		uuids.push(article.uuid);
 		articles.push(article);
 	});
 	let existing = (await Article.find({ uuid: { "$in": uuids } }, { uuid: 1 })).map(a => a.uuid);//Get existing article ids

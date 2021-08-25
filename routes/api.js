@@ -4,7 +4,7 @@ const rss = require('../rss');
 const Article = require('../models/article');
 
 router.get('/articles', (req, res, next) => { // Gets(including fetching new articles) the list of articles for the feed with shortened info
-    Article.find({}, {title:1, pubData:1,read:1}).then(data => res.json(data));
+    Article.find({}, {title:1, pubDate:1,read:1}).then(data => res.json(data));
 });
 
 router.post('/articles', (req, res, next) => {

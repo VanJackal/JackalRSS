@@ -30,6 +30,10 @@ const ArticleSchema = new Schema({
 	uuid:{
 		type:String,
 		required: true
+	},
+	read:{
+		type:Boolean,
+		required:true
 	}
 });
 

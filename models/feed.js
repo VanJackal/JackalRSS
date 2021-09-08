@@ -20,6 +20,6 @@ const FeedSchema = new Schema({
 	}
 });
 
-const Feed = mongoose.model('article', FeedSchema);
+const Feed = mongoose.model('feed', FeedSchema);
 
 module.exports = Feed;

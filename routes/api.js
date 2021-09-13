@@ -5,10 +5,6 @@ const Article = require('../models/article');
 const Feed = require('../models/feed');
 
 // ARTICLES
-router.get('/articles', (req, res, next) => { // Gets(including fetching new articles) the list of articles for the feed with shortened info
-    Article.find({}, {title:1, pubDate:1,read:1}).then(data => res.json(data));
-});
-
 router.get('/articles/:id', (req, res, next) => { // Gets full info of the article with the given id
 	Article.findById(req.params.id).then(data => res.json(data));
 });
@@ -22,16 +18,20 @@ router.delete('/articles/:id', (req, res, next) => {// Delete article entry by i
 });
 
 // FEEDS
-router.get('/feeds', (req, res, next) => {
+router.get('/feeds', (req, res, next) => {//get list of feeds (and basic info for feed)
 	Feed.find({}, {feedid:1}).then(data => res.json(data));
 });
 
-router.post('/feeds', (req, res, next) => {
+router.post('/feeds', (req, res, next) => {//add a new feed
 	Feed.insertMany([req.body]).then(res.json({added:req.body.feedid}));
 })
 
-router.post('/feeds/:feedid', (req, res, next) => {//TODO Move this functionality to a 'feeds' route
+router.post('/feeds/:feedid', (req, res, next) => {//fetch new entries for the feed with 'feedid'
     rss.fetchFeed(req.params.feedid).then(data => res.json(data));
+});
+
+router.get('/feeds/:feedid/articles', (req, res, next) => { // Gets the list of articles for the feed with shortened info
+    Article.find({feedid:req.params.feedid}, {title:1, pubDate:1,read:1}).then(data => res.json(data));
 });
 
 module.exports = router;

@@ -9,10 +9,6 @@ router.get('/articles', (req, res, next) => { // Gets(including fetching new art
     Article.find({}, {title:1, pubDate:1,read:1}).then(data => res.json(data));
 });
 
-router.post('/articles', (req, res, next) => {//TODO Move this functionality to a 'feeds' route
-    rss.fetchFeed(req.body.url).then(data => res.json(data));
-});
-
 router.get('/articles/:id', (req, res, next) => { // Gets full info of the article with the given id
 	Article.findById(req.params.id).then(data => res.json(data));
 });
@@ -33,5 +29,9 @@ router.get('/feeds', (req, res, next) => {
 router.post('/feeds', (req, res, next) => {
 	Feed.insertMany([req.body]).then(res.json({added:req.body.feedid}));
 })
+
+router.post('/feeds/:feedid', (req, res, next) => {//TODO Move this functionality to a 'feeds' route
+    rss.fetchFeed(req.params.feedid).then(data => res.json(data));
+});
 
 module.exports = router;

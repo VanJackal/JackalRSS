@@ -5,7 +5,7 @@ const Feed = require('./models/feed');
 const crypto = require('crypto');
 
 async function fetchFeed(feedid) {
-	let url = (await Feed.findOne({feedid:feedid},{link:1})).link;
+	let url = (await Feed.findById(feedid,{link:1})).link;
 	let feed = await parser.parseURL(url);
 	let articles = [];
 	let uuids = [];

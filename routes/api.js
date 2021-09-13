@@ -19,7 +19,7 @@ router.delete('/articles/:id', (req, res, next) => {// Delete article entry by i
 
 // FEEDS
 router.get('/feeds', (req, res, next) => {//get list of feeds (and basic info for feed)
-	Feed.find({}, {feedid:1}).then(data => res.json(data));
+	Feed.find({}, {title:1}).then(data => res.json(data));
 });
 
 router.post('/feeds', (req, res, next) => {//add a new feed

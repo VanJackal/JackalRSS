@@ -1,5 +1,9 @@
 const Parser = require('rss-parser');
-const parser = new Parser();
+const parser = new Parser({
+	customFields:{
+		item:['summary']
+	}
+});
 const Article = require('./models/article');
 const Feed = require('./models/feed');
 const crypto = require('crypto');
@@ -12,13 +16,13 @@ async function fetchFeed(feedid) {
 	console.log(feed.title);
 
 	feed.items.forEach(item => {
-		let keyString = item.title + item.content + item?.link + item?.enclosure;
+		let keyString = item.title + (item.content || item.summary) + item?.link + item?.enclosure;
 		let uuid = crypto.createHash("sha1").update(keyString).digest('base64');
 		uuids.push(uuid);
 		let article = {
 			feedid: feedid,
 			title: item.title || "Title Not Found",
-			description: item.content || "Description Not Found",
+			description: item.content || item.summary || "Description Not Found",//TODO Change this so its assigned to a var beforehand
 			pubDate: item?.pubDate,
 			link: item?.link,
 			enclosure: item?.enclosure,

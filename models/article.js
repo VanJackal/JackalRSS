@@ -22,7 +22,7 @@ const ArticleSchema = new Schema({
 		type: String
 	},
 	enclosure:{
-		type: String
+		type: Object
 	},
 	content:{
 		type: String

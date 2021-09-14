@@ -15,10 +15,11 @@ async function fetchFeed(feedid) {
 		let keyString = item.title + item.content + item?.link + item?.enclosure;
 		let uuid = crypto.createHash("sha1").update(keyString).digest('base64');
 		uuids.push(uuid);
+		console.log(item);
 		let article = {
 			feedid: feedid,
-			title: item.title,
-			description: item.content,
+			title: item.title || "Title Not Found",
+			description: item.content || "Description Not Found",
 			pubDate: item?.pubDate,
 			link: item?.link,
 			enclosure: item?.enclosure,

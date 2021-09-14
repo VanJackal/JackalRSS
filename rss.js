@@ -39,6 +39,13 @@ async function fetchFeed(feedid) {
 	return { new: newArticles.length };
 }
 
+async function removeFeed(feedid){
+	let remArticles = await Article.deleteMany({feedid:feedid});
+	let remFeeds = await Feed.deleteMany({_id:feedid});
+	return {articles:remArticles,feeds:remFeeds};
+}
+
 module.exports = {
-	fetchFeed: fetchFeed
+	fetchFeed: fetchFeed,
+	removeFeed: removeFeed
 };

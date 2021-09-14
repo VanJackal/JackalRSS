@@ -35,8 +35,7 @@ router.get('/feeds/:feedid/articles', (req, res, next) => { // Gets the list of 
 });
 
 router.delete('/feeds/:feedid', (req, res, next) => {//Remove feed and its connected articles
-	Article.remove({feedid:req.params.feedid});
-	Feed.deleteMany({_id:req.params.feedid}).then(data => res.json(data));
+	rss.removeFeed(req.params.feedid).then(data => res.json(data));
 })
 
 module.exports = router;

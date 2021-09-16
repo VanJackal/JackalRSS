@@ -23,7 +23,7 @@ router.get('/feeds', (req, res, next) => {//get list of feeds (and basic info fo
 });
 
 router.post('/feeds', (req, res, next) => {//add a new feed
-	Feed.insertMany([req.body]).then(res.json({added:req.body.feedid}));
+	Feed.insertMany([req.body]).then(res.json({added:req.body.link}));
 })
 
 router.post('/feeds/:feedid', (req, res, next) => {//fetch new entries for the feed with 'feedid'
@@ -36,6 +36,10 @@ router.get('/feeds/:feedid/articles', (req, res, next) => { // Gets the list of 
 
 router.delete('/feeds/:feedid', (req, res, next) => {//Remove feed and its connected articles
 	rss.removeFeed(req.params.feedid).then(data => res.json(data));
+})
+
+router.post('/util/feeds/info', (req, res, next) => { //gets the info from an rss feed
+	rss.getFeedInfo(req.body.url).then(data => res.json(data));
 })
 
 module.exports = router;

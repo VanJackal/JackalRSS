@@ -4,7 +4,6 @@ const Schema = mongoose.Schema;
 const FeedSchema = new Schema({
 	feedid:{
 		type: String,
-		required: true
 	},
 	title:{
 		type: String,

@@ -45,7 +45,16 @@ async function removeFeed(feedid){
 	return {articles:remArticles,feeds:remFeeds};
 }
 
+async function getFeedInfo(feedUrl){
+	let feed = await parser.parseURL(feedUrl);
+	return {
+		title: feed.title || "Default Title",
+		description: feed.description || "No Description",
+	};
+}
+
 module.exports = {
 	fetchFeed: fetchFeed,
-	removeFeed: removeFeed
+	removeFeed: removeFeed,
+	getFeedInfo: getFeedInfo
 };

@@ -38,6 +38,7 @@ router.delete('/feeds/:feedid', (req, res, next) => {//Remove feed and its conne
 	rss.removeFeed(req.params.feedid).then(data => res.json(data));
 })
 
+//UTIL
 router.post('/util/feeds/info', (req, res, next) => { //gets the info from an rss feed
 	rss.getFeedInfo(req.body.url).then(data => res.json(data));
 })

@@ -1,6 +1,9 @@
 const express = require('express');
+const session = require('express-session');
+const passport = require('passport');
 const mongoose = require('mongoose');
-const routes = require('./routes/api')
+const routes = require('./routes/api');
+const userRoutes = require('./routes/users');
 require('dotenv').config();
 
 const app = express();
@@ -20,8 +23,16 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
+app.use(session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/api', routes);
+app.use('/api/users', userRoutes);
 
 app.use((err, req, res, next) => {
     console.log(err);

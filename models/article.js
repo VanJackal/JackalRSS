@@ -34,6 +34,10 @@ const ArticleSchema = new Schema({
 	read:{
 		type:Boolean,
 		required:true
+	},
+	userid:{
+		type: String,
+		required: true
 	}
 });
 

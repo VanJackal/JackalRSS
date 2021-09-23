@@ -8,8 +8,9 @@ const Article = require('./models/article');
 const Feed = require('./models/feed');
 const crypto = require('crypto');
 
-async function fetchFeed(feedid) {
-	let url = (await Feed.findById(feedid,{link:1})).link;
+async function fetchFeed(feedid,userid) {
+	let url = (await Feed.findOne({_id:feedid,userid:userid},{link:1})).link;
+	console.log(`${userid}   ${url}`);
 	let feed = await parser.parseURL(url);
 	let articles = [];
 	let uuids = [];
@@ -28,20 +29,21 @@ async function fetchFeed(feedid) {
 			enclosure: item?.enclosure,
 			uuid:uuid,
 			read:false,
+			userid:userid,
 		};
 
 		articles.push(article);
 	});
-	let existing = (await Article.find({ uuid: { "$in": uuids }, feedid:feedid }, { uuid: 1, _id:0})).map(a => a.uuid);//Get existing article ids
+	let existing = (await Article.find({ uuid: { "$in": uuids }, feedid:feedid, userid:userid }, { uuid: 1, _id:0})).map(a => a.uuid);//Get existing article ids
 	let newArticles = articles.filter(item => !existing.includes(item.uuid));//get array of only new articles
 	await Article.insertMany(newArticles);//add new articles to db
 
 	return { new: newArticles.length };
 }
 
-async function removeFeed(feedid){
-	let remArticles = await Article.deleteMany({feedid:feedid});
-	let remFeeds = await Feed.deleteMany({_id:feedid});
+async function removeFeed(feedid,userid){
+	let remArticles = await Article.deleteMany({userid:userid,feedid:feedid});
+	let remFeeds = await Feed.deleteMany({userid:userid,_id:feedid});
 	return {articles:remArticles,feeds:remFeeds};
 }
 

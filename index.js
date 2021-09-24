@@ -4,6 +4,7 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const routes = require('./routes/api');
 const userRoutes = require('./routes/users');
+const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
@@ -16,11 +17,12 @@ mongoose.connect(process.env.DB, {useNewUrlParser: true,useFindAndModify: false,
 
 
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
+    //res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
     next();
 });
+app.use(cors())
 
 app.use(express.json());
 app.use(session({

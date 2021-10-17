@@ -17,7 +17,7 @@ router.put('/articles/:id', (req, res, next) => { // sets the readstate of the a
 
 router.delete('/articles/:id', (req, res, next) => {// Delete article entry by id
 	if(!req.user) return res.sendStatus(401);
-	Article.findOneAndDelete({_id:req.params.id,userid:req.body._id}).then(data => res.json(data));
+	Article.findOneAndDelete({_id:req.params.id,userid:req.user._id}).then(data => res.json(data));
 });
 
 // FEEDS

@@ -36,21 +36,13 @@ router.get('/feeds', async (req, res, next) => {//get list of feeds (and basic i
 		}
 	]);
 	const feeds = feedsData.map((feedData) => {
-		let feed = feedData;
-		feed.unread = numUnread.find(unread => {
-			return unread._id == feed.id
-		}).count;
-		console.log(feed);
-		console.log(feed.unread);
-		return feed;
+		let feed = feedData._doc;
+		const unread = numUnread.filter(unread => {
+			return unread._id == feed._id
+		})[0].count;
+
+		return {...feed,unread:unread};
 	})
-	console.log("Break")
-	console.log(typeof(feeds));
-	console.log(typeof(feeds[0]));
-	console.log(typeof(feeds[0].unread));
-	console.log(feeds)
-	console.log(feeds[0])
-	console.log(feeds[0].unread)
 
 	res.json(feeds);
 });

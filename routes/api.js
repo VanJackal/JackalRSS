@@ -3,6 +3,7 @@ const router = express.Router();
 const rss = require('../rss');
 const Article = require('../models/article');
 const Feed = require('../models/feed');
+const passport = require('passport');
 //TODO Seperate this into multiple files with prefixed routes
 // ARTICLES
 router.get('/articles/:id', (req, res, next) => { // Gets full info of the article with the given id
@@ -23,7 +24,20 @@ router.delete('/articles/:id', (req, res, next) => {// Delete article entry by i
 // FEEDS
 router.get('/feeds', async (req, res, next) => {//get list of feeds (and basic info for feed)
 	if (!req.user) return res.sendStatus(401);
-	let feedsData = await Feed.find({ userid: req.user.id }, { feedid: 1, title: 1 });
+	//get feed data
+	let feedsData = await Feed.find({ userid: req.user.id }, { feedid: 1, title: 1, folder: 1 });
+	//get folders
+	let folders = await Feed.aggregate([//TODO Simplify this to a single aggregate
+		{
+			"$match": { userid: req.user.id }
+		},
+		{
+			"$group": {
+				_id: "$folder"
+			}
+		}
+	])
+	// get number of unread articles by feed
 	const numUnread = await Article.aggregate([
 		{
 			"$match": { userid: req.user.id, read: false }
@@ -35,16 +49,30 @@ router.get('/feeds', async (req, res, next) => {//get list of feeds (and basic i
 			}
 		}
 	]);
+	//map numUnread to feeds
 	const feeds = feedsData.map((feedData) => {
 		let feed = feedData._doc;
 		const unread = numUnread.filter(unread => {
 			return unread._id == feed._id
 		})[0].count;
 
-		return {...feed,unread:unread};
+		return { ...feed, unread: unread };
 	})
-
-	res.json(feeds);
+	//map feeds to folders (dynamically create the list entries for each folder)
+	const feedsFolded = [];
+	folders.forEach((folder) => {
+		if (folder._id) {//if folder is not null
+			const folderFeeds = feeds.filter(feed => {
+				return feed.folder === folder._id;
+			})
+			feedsFolded.push({ folder: folder, feeds: folderFeeds });
+		}
+	})
+	const unfolded = feeds.filter(feed => {
+		return !feed.folder;
+	})
+	unfolded ? feedsFolded.push({ folder: "Uncategorized", feeds: unfolded }) : _;
+	res.json(feedsFolded);
 });
 
 router.post('/feeds', (req, res, next) => {//add a new feed

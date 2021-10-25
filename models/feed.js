@@ -20,6 +20,9 @@ const FeedSchema = new Schema({
 	userid:{
 		type: String,
 		required: true
+	},
+	folder:{
+		type: String
 	}
 });
 

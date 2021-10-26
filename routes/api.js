@@ -65,7 +65,7 @@ router.get('/feeds', async (req, res, next) => {//get list of feeds (and basic i
 			const folderFeeds = feeds.filter(feed => {
 				return feed.folder === folder._id;
 			})
-			feedsFolded.push({ folder: folder, feeds: folderFeeds });
+			feedsFolded.push({ folder: folder._id, feeds: folderFeeds });
 		}
 	})
 	const unfolded = feeds.filter(feed => {

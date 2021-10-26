@@ -88,12 +88,12 @@ router.post('/feeds/:feedid', (req, res, next) => {//fetch new entries for the f
 
 router.put('/feeds/:feedid', (req, res, next) => {//update feed entry
 	if (!req.user) return res.sendStatus(401);
-	Feed.findOneAndUpdate({ _id: req.params.id, userid: req.user._id }, req.body).then(data => res.json(data));
+	Feed.findOneAndUpdate({ _id: req.params.feedid, userid: req.user._id }, req.body).then(data => res.json(data));
 });
 
 router.get('/feeds/:feedid', (req, res, next) => {//get feed entry
 	if (!req.user) return res.sendStatus(401);
-	Feed.findOne({ _id: req.params.id, userid: req.user._id }).then(data => res.json(data));
+	Feed.findOne({ _id: req.params.feedid, userid: req.user._id }).then(data => res.json(data));
 });
 
 router.get('/feeds/:feedid/articles', (req, res, next) => { // Gets the list of articles for the feed with shortened info

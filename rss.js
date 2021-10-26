@@ -8,6 +8,15 @@ const Article = require('./models/article');
 const Feed = require('./models/feed');
 const crypto = require('crypto');
 
+async function refreshAll(userid){
+	const feeds = await Feed.find({userid:userid},{_id:1})
+	let count = 0;
+	feeds.forEach(async (feed) => {
+		count += (await fetchFeed(feed._id,userid))
+	})
+	return {new:count};
+}
+
 async function fetchFeed(feedid,userid) {
 	let url = (await Feed.findOne({_id:feedid,userid:userid},{link:1})).link;
 	console.log(`${userid}   ${url}`);
@@ -58,5 +67,6 @@ async function getFeedInfo(feedUrl){
 module.exports = {
 	fetchFeed: fetchFeed,
 	removeFeed: removeFeed,
-	getFeedInfo: getFeedInfo
+	getFeedInfo: getFeedInfo,
+	refreshAll: refreshAll,
 };

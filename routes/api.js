@@ -111,6 +111,11 @@ router.post('/util/feeds/info', (req, res, next) => { //gets the info from an rs
 	rss.getFeedInfo(req.body.url).then(data => res.json(data));
 })
 
+router.post('/util/feeds/refresh', (req, res, next) =>{
+	if (!req.user) return res.sendStatus(401);
+	rss.refreshAll(req.user._id).then((data) => res.json(data));
+})
+
 router.get('/util/feeds/folders',async (req, res, next) => {
 	if (!req.user) return res.sendStatus(401);
 	const foldersObj = await Feed.aggregate([

@@ -54,7 +54,7 @@ router.get('/feeds', async (req, res, next) => {//get list of feeds (and basic i
 		let feed = feedData._doc;
 		const unread = numUnread.filter(unread => {
 			return unread._id == feed._id
-		})[0].count;
+		})[0]?.count || 0;
 
 		return { ...feed, unread: unread };
 	})

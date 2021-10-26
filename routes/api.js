@@ -86,6 +86,16 @@ router.post('/feeds/:feedid', (req, res, next) => {//fetch new entries for the f
 	rss.fetchFeed(req.params.feedid, req.user._id).then(data => res.json(data));
 });
 
+router.put('/feeds/:feedid', (req, res, next) => {//update feed entry
+	if (!req.user) return res.sendStatus(401);
+	Feed.findOneAndUpdate({ _id: req.params.id, userid: req.user._id }, req.body).then(data => res.json(data));
+});
+
+router.get('/feeds/:feedid', (req, res, next) => {//get feed entry
+	if (!req.user) return res.sendStatus(401);
+	Feed.findOne({ _id: req.params.id, userid: req.user._id }).then(data => res.json(data));
+});
+
 router.get('/feeds/:feedid/articles', (req, res, next) => { // Gets the list of articles for the feed with shortened info
 	if (!req.user) return res.sendStatus(401);
 	Article.find({ feedid: req.params.feedid, userid: req.user._id }, { title: 1, pubDate: 1, read: 1 }).then(data => res.json(data));

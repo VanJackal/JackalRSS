@@ -1,7 +1,18 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import {model , Schema, Types} from "mongoose"
 
-const ArticleSchema = new Schema({
+interface IArticle {
+	feedid:Types.ObjectId,
+	title:string,
+	description:string,
+	pubDate:Date,
+	link?:string,
+	enclosure?:object,
+	content?:string,
+	read:boolean,
+	userid:Types.ObjectId
+}
+
+const ArticleSchema = new Schema<IArticle>({
 	feedid:{
 		type: String,
 		required: true
@@ -41,6 +52,6 @@ const ArticleSchema = new Schema({
 	}
 });
 
-const Article = mongoose.model('article', ArticleSchema);
+const Article = model<IArticle>('article', ArticleSchema);
 
-module.exports = Article;
+export default Article;

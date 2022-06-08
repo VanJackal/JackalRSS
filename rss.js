@@ -4,8 +4,8 @@ const parser = new Parser({
 		item:['summary']
 	}
 });
-const Article = require('./models/article');
-const Feed = require('./models/feed');
+const Article = require('./lib/models/article');
+const Feed = require('./lib/models/feed');
 const crypto = require('crypto');
 
 async function refreshAll(userid){

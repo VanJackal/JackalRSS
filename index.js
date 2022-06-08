@@ -4,7 +4,6 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const routes = require('./lib/routes/api');
 const userRoutes = require('./lib/routes/users');
-require('dotenv').config();
 
 const app = express();
 
@@ -29,8 +28,8 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.initialize({}));
+app.use(passport.session({}));
 
 app.use('/api', routes);
 app.use('/api/users', userRoutes);

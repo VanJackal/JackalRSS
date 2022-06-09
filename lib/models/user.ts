@@ -25,4 +25,4 @@ const UserSchema = new Schema<IUser>({
 UserSchema.plugin(passport);
 const User = model<IUser>('user',UserSchema);
 
-export default User;
+export = User;

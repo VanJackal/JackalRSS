@@ -54,4 +54,4 @@ const ArticleSchema = new Schema<IArticle>({
 
 const Article = model<IArticle>('article', ArticleSchema);
 
-export default Article;
+export = Article;

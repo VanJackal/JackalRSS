@@ -22,4 +22,4 @@ const FolderSchema = new Schema<IFolder>({
 
 const Folder = model<IFolder>('folder', FolderSchema);
 
-export default Folder;
+export = Folder;

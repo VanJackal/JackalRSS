@@ -8,6 +8,7 @@ interface IArticle {
 	link?:string,
 	enclosure?:object,
 	content?:string,
+	uuid:string,
 	read:boolean,
 	userid:Types.ObjectId
 }
@@ -27,7 +28,7 @@ const ArticleSchema = new Schema<IArticle>({
 	},
 	pubDate:{
 		type: Date,
-		default: Date.now
+		default: new Date()
 	},
 	link:{
 		type: String
@@ -54,4 +55,7 @@ const ArticleSchema = new Schema<IArticle>({
 
 const Article = model<IArticle>('article', ArticleSchema);
 
-export = Article;
+export {
+	Article,
+	IArticle
+};

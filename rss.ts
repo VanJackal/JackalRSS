@@ -5,10 +5,9 @@ const parser = new Parser({
 		item:['summary']
 	}
 });
-import {Article, IArticle} from "./lib/models/article";
+import {Article, IArticle, Feed} from 'jrss-db';
 import {createHash} from 'crypto'
 
-const Feed = require('./lib/models/feed');
 
 type feedInfo = {
 	title:string,

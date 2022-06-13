@@ -36,4 +36,7 @@ const FeedSchema = new Schema<IFeed>({
 
 const Feed = model<IFeed>('feed', FeedSchema);
 
-export = Feed;
+export {
+	Feed,
+	IFeed
+};

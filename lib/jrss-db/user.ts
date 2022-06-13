@@ -25,4 +25,7 @@ const UserSchema = new Schema<IUser>({
 UserSchema.plugin(passport);
 const User = model<IUser>('user',UserSchema);
 
-export = User;
+export {
+    User,
+    IUser
+};

@@ -6,6 +6,7 @@ const parser = new Parser({
 	}
 });
 import {Article, IArticle, Feed} from 'jrss-db';
+import {Types} from 'mongoose'
 import {createHash} from 'crypto'
 
 
@@ -28,12 +29,29 @@ async function refreshAll(userid) : Promise<number>{
 	return count;
 }
 
-function getArticleUUID(item: { [p: string]: any } & Parser.Item) {
+/**
+ * get uuid of article
+ * uuid is a sha1 hash of the title, content, link, and enclosure of the article
+ *
+ * @param item article details
+ * @returns string uuid of the article
+ */
+function getArticleUUID(item: { [p: string]: any } & Parser.Item):string {
 	let keyString = item.title + (item.content || item.summary) + item?.link + item?.enclosure;
 	return createHash("sha1").update(keyString).digest('base64');
 }
 
-function getArticle(feedid, item: { [p: string]: any } & Parser.Item, uuid: string, userid):IArticle {
+/**
+ * create an article object which conforms to the IArticle interface
+ *
+ * @param feedid id of the articles feed
+ * @param item article info object
+ * @param uuid unique sha1 hash of the article
+ * @param userid id of the articles user
+ *
+ * @returns IArticle
+ */
+function getArticle(feedid:Types.ObjectId, item: { [p: string]: any } & Parser.Item, uuid: string, userid:Types.ObjectId):IArticle {
 	return {
 		feedid: feedid,
 		title: item.title || "Title Not Found",
@@ -79,10 +97,16 @@ async function fetchFeed(feedid,userid):Promise<number> {
 	return newArticles.length;
 }
 
-async function removeFeed(feedid,userid){
-	let remArticles = await Article.deleteMany({userid:userid,feedid:feedid});
-	let remFeeds = await Feed.deleteMany({userid:userid,_id:feedid});
-	return {articles:remArticles,feeds:remFeeds};
+/**
+ * remove a feed and its articles from the db
+ * @param feedid id of the feed to remove
+ * @param userid id of the feeds user
+ * @returns Promise<number> number of removed articles
+ */
+async function removeFeed(feedid,userid):Promise<number>{
+	let remArticles = await Article.deleteMany({userid:userid,feedid:feedid}).exec();
+	await Feed.deleteMany({userid:userid,_id:feedid});
+	return remArticles?.n || remArticles?.deletedCount;
 }
 
 /**

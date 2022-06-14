@@ -1,9 +1,10 @@
-const express = require('express');
-const session = require('express-session');
-const passport = require('passport');
-const routes = require('./lib/routes/api');
-const userRoutes = require('./lib/routes/users');
-require('jrss-db');
+import express = require('express');
+import session = require('express-session');
+import passport = require('passport');
+import routes = require('./lib/routes/api');
+import userRoutes = require('./lib/routes/users');
+import {logger} from 'logging'
+import 'jrss-db'//initializes mongoose
 
 const app = express();
 
@@ -31,10 +32,10 @@ app.use('/api', routes);
 app.use('/api/users', userRoutes);
 
 app.use((err, req, res, next) => {
-    console.log(err);
+    logger.error(err);
     next();
 });
 
 app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+    logger.info(`Server running on port ${port}`);
 });

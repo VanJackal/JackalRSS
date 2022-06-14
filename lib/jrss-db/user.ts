@@ -1,7 +1,8 @@
-import {model , Schema} from "mongoose"
+import {model, Schema} from "mongoose"
 import * as passport from 'passport-local-mongoose'
+import {IGenericDoc} from "./index";
 
-interface IUser {
+interface IUser extends IGenericDoc{
     username:string,
     salt:string,
     hash:string

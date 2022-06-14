@@ -9,7 +9,6 @@
         <summary>
             This is a summary
         </summary>
-        <link>URL</link>
     </entry>
     <entry>
         <title>Article 2</title>
@@ -18,6 +17,6 @@
         <content>
             this is content
         </content>
-        <link>URL</link>
+        <link href="url" rel="alternate"/>
     </entry>
 </feed>

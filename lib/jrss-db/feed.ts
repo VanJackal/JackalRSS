@@ -1,8 +1,6 @@
 import {model , Schema, Types} from "mongoose"
-import {IGenericDoc} from "./index";
 
-interface IFeed extends IGenericDoc{
-	_id?:Types.ObjectId,
+interface IFeed{
 	shortTitle?:string,
 	title:string,
 	description:string,

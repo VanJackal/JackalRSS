@@ -1,7 +1,6 @@
 import {model, Schema} from "mongoose"
-import {IGenericDoc} from "./index";
 
-interface IFolder extends IGenericDoc{
+interface IFolder{
     name:string,
     shortName?:string,
     parent:string

@@ -7,7 +7,7 @@ const parser = new Parser({
 	}
 });
 import {Article, IArticle, Feed, IFeed} from 'jrss-db';
-import {Types} from 'mongoose'
+import {Types, Document} from 'mongoose'
 import {createHash} from 'crypto'
 
 
@@ -24,7 +24,7 @@ type feedInfo = {
 async function refreshAll(userid) : Promise<number>{
 	logger.info(`Refreshing all feeds for user (${userid})`)
 
-	const feeds:IFeed[] = await Feed.find({userid:userid},{_id:1}).exec()
+	const feeds:(IFeed & Document)[] = await Feed.find({userid:userid},{_id:1}).exec()
 	let count = 0;
 	let countP:Promise<number>[] = []
 	//start asynchronous feed fetch for all feeds
@@ -98,7 +98,7 @@ async function fetchFeed(feedid,userid):Promise<number> {
 		let article:IArticle = getArticle(feedid, item, uuid, userid);
 		articles.push(article);
 	});
-	//Get existing article uuids
+	//Get list existing article uuids
 	let existing = (await Article.find({ uuid: { "$in": uuids }, feedid:feedid, userid:userid },
 		{ uuid: 1, _id:0})).map(a => a.uuid);
 	//get array of only new articles (filter out articles whose uuid is in existing)

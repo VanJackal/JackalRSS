@@ -1,6 +1,8 @@
 //This test file requires a server @ the address stored in process.env.FEEDS_HOST (in particular <FEEDS_HOST>/feeds/[feed0.xml,feed1.xml])
 import * as mongoose from 'mongoose'
 import {Feed, init} from 'jrss-db'
+import * as assert from 'assert'
+import * as rss from 'rss-handler'
 
 //todo update this file to use an actual user (should use the api libraries)
 const USERID = "000000000000";//should not actually point to something
@@ -24,8 +26,10 @@ before(async () => {
 })
 
 describe("RSS-Handler Tests", () => {
-    //TODO create test Feeds that can be consistently fetched (store them in a directory)
-    it("should fetch ")
+    it("should fetch 5 articles from the test feeds initially", async () => {
+        let newArticles = await rss.refreshAll(USERID);
+        assert(newArticles == 5)
+    })
 })
 
 after(async () => {

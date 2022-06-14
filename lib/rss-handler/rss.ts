@@ -1,11 +1,12 @@
 import Parser = require("rss-parser");
+import {logger} from 'logging'
 
 const parser = new Parser({
 	customFields:{
 		item:['summary']
 	}
 });
-import {Article, IArticle, Feed} from 'jrss-db';
+import {Article, IArticle, Feed, IFeed} from 'jrss-db';
 import {Types} from 'mongoose'
 import {createHash} from 'crypto'
 
@@ -21,22 +22,22 @@ type feedInfo = {
  * @returns Promise<number> amount of new articles
  */
 async function refreshAll(userid) : Promise<number>{
-	const feeds = await Feed.find({userid:userid},{_id:1}).exec()
-	return new Promise<number>((resolve) => {
-		let count = 0;
-		let countP:Promise<number>[] = []
-		//start asynchronous feed fetch for all feeds
-		for (let i = 0; i < feeds.length; i++) {
-			countP.push(fetchFeed(feeds[i].id, userid))
-		}
-		//collect promises and count total number of new articles
-		Promise.all(countP).then((counts:number[]) => {
-			for (let i = 0; i < counts.length; i++){
-				count += counts[i];
-			}
-		})
-		resolve(count);
+	logger.info(`Refreshing all feeds for user (${userid})`)
+
+	const feeds:IFeed[] = await Feed.find({userid:userid},{_id:1}).exec()
+	let count = 0;
+	let countP:Promise<number>[] = []
+	//start asynchronous feed fetch for all feeds
+	for (let i = 0; i < feeds.length; i++) {
+		countP.push(fetchFeed(feeds[i]._id, userid))
+	}
+	//collect promises and count total number of new articles
+	let counts:number[] = await Promise.all(countP);
+	counts.forEach((n) => {
+		count += n;
 	})
+	logger.info(`(${userid}) ${count} total new articles`)
+	return count;
 }
 
 /**
@@ -84,11 +85,11 @@ function getArticle(feedid:Types.ObjectId, item: { [p: string]: any } & Parser.I
  */
 async function fetchFeed(feedid,userid):Promise<number> {
 	let url = (await Feed.findOne({_id:feedid,userid:userid},{link:1})).link;
-	console.log(`${userid}   ${url}`);
+	logger.debug(`(${userid}) Fetching ${feedid}(${url})`);
 	let feed = await parser.parseURL(url);
+	logger.trace(`(${userid}) parsed ${url}(${feedid}) - Title: ${feed.title}`)
 	let articles:IArticle[] = [];
 	let uuids = [];
-	console.log(feed.title);
 
 	//store each article as an IArticle
 	feed.items.forEach(item => {
@@ -104,6 +105,7 @@ async function fetchFeed(feedid,userid):Promise<number> {
 	let newArticles = articles.filter(item => !existing.includes(item.uuid));
 	await Article.insertMany(newArticles);//add new articles to db
 
+	logger.trace(`fetched ${newArticles.length} in ${feedid}`)
 	return newArticles.length;
 }
 
@@ -133,9 +135,9 @@ async function getFeedInfo(feedUrl):Promise<feedInfo>{
 	};
 }
 
-module.exports = {
-	fetchFeed: fetchFeed,
-	removeFeed: removeFeed,
-	getFeedInfo: getFeedInfo,
-	refreshAll: refreshAll,
-};
+export {
+	fetchFeed,
+	removeFeed,
+	getFeedInfo,
+	refreshAll
+}

@@ -84,6 +84,7 @@ function getArticle(feedid:Types.ObjectId, item: { [p: string]: any } & Parser.I
  * @returns Promise<number> amount of new articles
  */
 async function fetchFeed(feedid,userid):Promise<number> {
+	logger.trace(`fetchFeed(${feedid}, ${userid})`)
 	let url = (await Feed.findOne({_id:feedid,userid:userid},{link:1})).link;
 	logger.debug(`(${userid}) Fetching ${feedid}(${url})`);
 	let feed = await parser.parseURL(url);
@@ -116,8 +117,11 @@ async function fetchFeed(feedid,userid):Promise<number> {
  * @returns Promise<number> number of removed articles
  */
 async function removeFeed(feedid,userid):Promise<number>{
+	logger.info(`User (${userid}) removing feed ${feedid}`)
+
 	let remArticles = await Article.deleteMany({userid:userid,feedid:feedid}).exec();
 	await Feed.deleteMany({userid:userid,_id:feedid});
+	logger.debug(`${userid} Removed feed:${feedid} containing ${remArticles?.n || remArticles?.deletedCount} articles`)
 	return remArticles?.n || remArticles?.deletedCount;
 }
 

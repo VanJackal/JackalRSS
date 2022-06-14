@@ -21,12 +21,20 @@ type feedInfo = {
  * @returns Promise<number> amount of new articles
  */
 async function refreshAll(userid) : Promise<number>{
-	const feeds = await Feed.find({userid:userid},{_id:1})
-	let count = 0;
-	feeds.forEach(async (feed) => {//TODO make this handle the promises properly
-		count += (await fetchFeed(feed._id,userid))
+	const feeds = await Feed.find({userid:userid},{_id:1}).exec()
+	return new Promise<number>((resolve) => {
+		let count = 0;
+		let countP:Promise<number>[] = []
+		for (let i = 0; i < feeds.length; i++) {
+			countP.push(fetchFeed(feeds[i].id, userid))
+		}
+		Promise.all(countP).then((counts:number[]) => {
+			for (let i = 0; i < counts.length; i++){
+				count += counts[i];
+			}
+		})
+		resolve(count);
 	})
-	return count;
 }
 
 /**

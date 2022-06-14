@@ -1,4 +1,4 @@
-//This test file requires a server @ the address stored in process.env.FEEDS_HOST (in particular <FEEDS_HOST>/feeds/[feed0.xml,feed1.xml])
+//This test file requires a server @ the address stored in process.env.FEEDS_HOST (in particular <FEEDS_HOST>/[feed0.xml,feed1.xml])
 import * as mongoose from 'mongoose'
 import {Feed, init} from 'jrss-db'
 import * as assert from 'assert'

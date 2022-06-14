@@ -3,6 +3,7 @@ const session = require('express-session');
 const passport = require('passport');
 const routes = require('./lib/routes/api');
 const userRoutes = require('./lib/routes/users');
+require('jrss-db');
 
 const app = express();
 

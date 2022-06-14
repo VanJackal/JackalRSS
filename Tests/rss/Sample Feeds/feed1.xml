@@ -1,0 +1,23 @@
+<feed xml:lang="en">
+    <title>JRSS test Atom feed</title>
+    <id>http://static.h.njackal.com</id>
+    <updated>2022-06-13T00:00:00Z</updated>
+    <entry>
+        <title>Article 1</title>
+        <id>A1</id>
+        <updated>2022-06-13T00:00:00Z</updated>
+        <summary>
+            This is a summary
+        </summary>
+        <link>URL</link>
+    </entry>
+    <entry>
+        <title>Article 2</title>
+        <id>A1</id>
+        <updated>2022-06-13T00:00:00Z</updated>
+        <content>
+            this is content
+        </content>
+        <link>URL</link>
+    </entry>
+</feed>

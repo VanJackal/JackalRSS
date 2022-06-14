@@ -1,0 +1,26 @@
+<rss version="2.0">
+    <channel>
+        <title>JRSS Test RSS Feed 0</title>
+        <description>RSS feed to test the functionality of JRSS</description>
+        <link>http://static.h.njackal.com</link>
+        <item>
+            <title>Article 1</title>
+            <description>this is a sample article</description>
+            <link>http://example.com</link>
+            <enclosure url="url" type="audio/mp3"/>
+            <pubDate>Tue, 14 Jun 2022 00:00:00 UTC</pubDate>
+        </item>
+        <item>
+            <title>Article 2</title>
+            <description>this is a sample article</description>
+            <link>http://example.com</link>
+            <enclosure url="url" type="audio/mp3"/>
+            <pubDate>Tue, 13 Jun 2022 00:00:00 UTC</pubDate>
+        </item>
+        <item>
+            <title>Article 3</title>
+            <description>this is a sample article</description>
+            <link>http://example.com</link>
+        </item>
+    </channel>
+</rss>

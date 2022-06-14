@@ -20,5 +20,6 @@ export {
     IArticle,
     IFeed,
     IUser,
-    IFolder
+    IFolder,
+    init
 }

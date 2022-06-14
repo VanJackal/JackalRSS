@@ -25,9 +25,11 @@ async function refreshAll(userid) : Promise<number>{
 	return new Promise<number>((resolve) => {
 		let count = 0;
 		let countP:Promise<number>[] = []
+		//start asynchronous feed fetch for all feeds
 		for (let i = 0; i < feeds.length; i++) {
 			countP.push(fetchFeed(feeds[i].id, userid))
 		}
+		//collect promises and count total number of new articles
 		Promise.all(countP).then((counts:number[]) => {
 			for (let i = 0; i < counts.length; i++){
 				count += counts[i];

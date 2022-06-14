@@ -6,7 +6,7 @@ interface IFeed {
 	description:string,
 	link:string,
 	userid:Types.ObjectId,
-	folderid:Types.ObjectId
+	folderid?:Types.ObjectId
 }
 
 const FeedSchema = new Schema<IFeed>({

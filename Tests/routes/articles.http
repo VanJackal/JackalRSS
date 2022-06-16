@@ -1,0 +1,37 @@
+### Login / Register
+POST http://{{host}}/api/users/register
+Content-Type: application/json
+
+{
+  "username":"test",
+  "password":"test"
+}
+###
+POST http://{{host}}/api/users/login
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "test"
+}
+### Test get on non existant article
+GET http://{{host}}/api/articles/{{articleid}}
+Accept: application/json
+
+> {%
+client.test("status should be 200", () => {
+    client.assert(response.status === 200)
+})
+client.test("response should be falsy", () => {
+    client.assert(!response.body)
+})
+%}
+### Test get articles with invalid id
+GET http://{{host}}/api/articles/notValid
+Accept: application/json
+
+> {%
+client.test("status should be 400", () => {
+    client.assert(response.status === 400)
+})
+%}

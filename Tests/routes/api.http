@@ -1,4 +1,8 @@
 GET http://localhost:5000/api/feeds
 Accept: application/json
 
+> {% client.test("/feeds should be unauthorized", () => {
+    client.assert(response.status === 401)
+}) %}
+
 ###

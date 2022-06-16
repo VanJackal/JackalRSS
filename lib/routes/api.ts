@@ -5,6 +5,8 @@ const Article = require('../jrss-db/article').Article;
 const Feed = require('../jrss-db/feed').Feed;
 const passport = require('passport');
 //TODO Seperate this into multiple files with prefixed routes
+// arrow functions for routes should only ensure the imput is valid(for now there is no validation) then send the requests to a library function
+
 // ARTICLES
 router.get('/articles/:id', (req, res, next) => { // Gets full info of the article with the given id
 	if (!req.user) return res.sendStatus(401);
@@ -71,7 +73,9 @@ router.get('/feeds', async (req, res, next) => {//get list of feeds (and basic i
 	const unfolded = feeds.filter(feed => {
 		return !feed.folder;
 	})
-	unfolded ? feedsFolded.push({ folder: "Uncategorized", feeds: unfolded }) : _;
+	if (unfolded) {
+		feedsFolded.push({ folder: "Uncategorized", feeds: unfolded })
+	}
 	res.json(feedsFolded);
 });
 

@@ -1,7 +1,7 @@
 import express = require('express');
 import session = require('express-session');
 import passport = require('passport');
-import routes = require('./lib/routes/api');
+import {ArticlesRouter, FeedsRouter, UtilRouter} from 'routes'
 import userRoutes = require('./lib/routes/users');
 import {logger} from 'logging'
 import 'jrss-db'//initializes mongoose
@@ -28,7 +28,9 @@ app.use(session({
 app.use(passport.initialize({}));
 app.use(passport.session({}));
 
-app.use('/api', routes);
+app.use('/api/articles', ArticlesRouter);
+app.use('/api/feeds', FeedsRouter);
+app.use('/api/util', UtilRouter);
 app.use('/api/users', userRoutes);
 
 app.use((err, req, res, next) => {

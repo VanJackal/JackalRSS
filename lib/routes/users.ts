@@ -1,8 +1,9 @@
-const express = require('express');
+import express = require('express');
+import passport = require('passport');
+import {User} from 'jrss-db';
+import {logger} from 'logging'
+
 const router = express.Router();
-const passport = require('passport');
-const LocalStrategy = require('passport-local');
-const User = require('../jrss-db/user').User;
 
 passport.use(User.createStrategy());
 

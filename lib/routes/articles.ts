@@ -5,12 +5,12 @@ import * as lib from './articlesLib'
 
 const router = express.Router()
 
-// ROUTES
 /**
  * handle verification and ensure id param and userid are valid
  */
 router.all('/:id', (req,res,next) => {
     if (!req.user) return res.sendStatus(401);
+    //check if the ids are valid send 400 if not
     if (!(isValidObjectId(req.params.id) && isValidObjectId(req.user._id))) {
         logger.trace(`GET articles/:id invalid userid(${req.user._id}) or articleid(${req.params.id})`)
         res.message = "Invalid Userid or articleId"

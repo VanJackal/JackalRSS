@@ -11,6 +11,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 router.post('/login', passport.authenticate('local'), (req, res) => {
+    logger.trace("users/login called")
     req.logIn(req.user, (err) => {
         if (err) {
             logger.warn(`Error in login process for ${req.user}:\n` + err);
@@ -22,6 +23,7 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 })
 
 router.post('/logout', (req, res) => {
+    logger.trace("users/logout called")
     console.log(req)
     let msg = `Logged out ${req.user?.username || "[Not Logged In]"}`;
     if (req.user) logger.info(`${req.user?.username} logged out`);
@@ -30,6 +32,7 @@ router.post('/logout', (req, res) => {
 })
 
 router.post('/register', async (req, res) => {
+    logger.trace("users/register called")
     const { username, password } = req.body;
     const foundUser = await User.findOne({ username: username });
     if (foundUser) {

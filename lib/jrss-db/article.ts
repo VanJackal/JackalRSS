@@ -4,7 +4,7 @@ interface IArticle{
 	feedid:Types.ObjectId,
 	title:string,
 	description:string,
-	pubDate:Date,
+	pubDate?:Date,
 	link?:string,
 	enclosure?:object,
 	content?:string,
@@ -15,7 +15,7 @@ interface IArticle{
 
 const ArticleSchema = new Schema<IArticle>({
 	feedid:{
-		type: String,
+		type: Schema.Types.ObjectId,
 		required: true
 	},
 	title:{
@@ -48,7 +48,7 @@ const ArticleSchema = new Schema<IArticle>({
 		required:true
 	},
 	userid:{
-		type: String,
+		type: Schema.Types.ObjectId,
 		required: true
 	}
 });

@@ -2,7 +2,7 @@ import express = require('express');
 import session = require('express-session');
 import passport = require('passport');
 import {ArticlesRouter, FeedsRouter, UtilRouter} from 'routes'
-import userRoutes = require('./lib/routes/users');
+import userRoutes = require('routes/users');
 import {logger} from 'logging'
 import 'jrss-db'//initializes mongoose
 

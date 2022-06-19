@@ -1,21 +1,32 @@
 import express = require('express')
 import {Feed} from "../jrss-db";
 import rss = require('rss-handler')
+import {logger} from 'logging'
 
 const router = express.Router()
 
 //UTIL
-router.post('/util/feeds/info', (req, res, next) => { //gets the info from an rss feed
-    rss.getFeedInfo(req.body.url).then(data => res.json(data));
+router.post('/util/feeds/info', async (req, res) => { //gets the info from an rss feed
+    logger.debug(`Getting feed info for ${req.body.url}`)
+    try {
+        let feedInfo = await rss.getFeedInfo(req.body.url)
+        res.status(200)
+        res.json(feedInfo);
+    } catch (e) {
+        logger.debug("Error in /util/feeds/info")
+        res.status(500)
+        res.json({message:"There was an issue fetching the remote feed, this may mean there is no feed at the url"})
+    }
 })
 
-router.post('/util/feeds/refresh', (req, res, next) =>{
+router.post('/util/feeds/refresh', (req, res) =>{
     if (!req.user) return res.sendStatus(401);
     rss.refreshAll(req.user._id).then((data) => res.json(data));
 })
 
-router.get('/util/feeds/folders',async (req, res, next) => {
+router.get('/util/feeds/folders',async (req, res) => {//TODO this needs to be moved to a folders.ts route file
     if (!req.user) return res.sendStatus(401);
+    logger.error('GET /util/feeds/folders -> route not properly implemented')
     const foldersObj = await Feed.aggregate([
         {
             "$match": { userid: req.user.id }

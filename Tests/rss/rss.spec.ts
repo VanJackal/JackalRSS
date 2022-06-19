@@ -57,6 +57,7 @@ describe("RSS-Handler Tests", async () => {
         assert(feed0info.title && feed0info.description)
         assert(feed1info.title && feed1info.description)
     })
+    it("should return falsy if the feed doesnt exist at the url")
 })
 
 after(async () => {

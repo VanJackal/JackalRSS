@@ -1,13 +1,9 @@
 import * as aLib from 'routes/articlesLib'
 import * as assert from 'assert'
 import {Types} from 'mongoose'
-import {Article, IArticle, init} from 'jrss-db'
+import {Article, IArticle} from 'jrss-db'
 
 const USERID:Types.ObjectId = Types.ObjectId("000000000000000000000000");
-
-before( ()=>{
-    init()
-})
 
 describe("ArticlesLib Testing", () => {
     let articleid:Types.ObjectId;

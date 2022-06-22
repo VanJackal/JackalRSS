@@ -1,15 +1,10 @@
 //This test file requires a server @ the address stored in process.env.FEEDS_HOST (in particular <FEEDS_HOST>/[feed0.xml,feed1.xml])
-import * as mongoose from 'mongoose'
-import {Article, Feed, init} from 'jrss-db'
+import {Article, Feed} from 'jrss-db'
 import * as assert from 'assert'
 import * as rss from 'rss-handler'
 
 //todo update this file to use an actual user (should use the api libraries)
 const USERID = "000000000000000000000000";//should not actually point to something
-
-before(() => {
-    init()
-})
 
 describe("RSS-Handler Tests", async () => {
     let feed0id;
@@ -58,9 +53,4 @@ describe("RSS-Handler Tests", async () => {
         assert(feed1info.title && feed1info.description)
     })
     it("should return falsy if the feed doesnt exist at the url")
-})
-
-after(async () => {
-    await mongoose.connection.db.dropDatabase();
-    await mongoose.disconnect();
 })

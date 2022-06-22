@@ -1,12 +1,17 @@
-import {model, Schema} from "mongoose"
+import {model, Schema, Types} from "mongoose"
 
 interface IFolder{
+    userid:Types.ObjectId,
     name:string,
     shortName?:string,
-    parent:string
+    parent?:Types.ObjectId
 }
 
 const FolderSchema = new Schema<IFolder>({
+    userid:{
+        type:Schema.Types.ObjectId,
+        required:true
+    },
     name:{
         type: String,
         required: true
@@ -15,8 +20,8 @@ const FolderSchema = new Schema<IFolder>({
         type: String
     },
     parent:{
-        type: String,
-        required: true
+        type: Schema.Types.ObjectId,
+        required: false
     }
 });
 

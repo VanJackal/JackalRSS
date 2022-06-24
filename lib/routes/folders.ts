@@ -12,8 +12,8 @@ router.all("/(.*)", (req, res, next) => {
 
 router.get("/", async (req,res) => {
     let folders:IFolder[] = await lib.getFolders(req.user._id);
-    req.json(folders);
-    req.status(200);
+    res.json(folders);
+    res.status(200);
 })
 
 router.post("/", (req,res) => {

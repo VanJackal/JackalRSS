@@ -1,4 +1,4 @@
-import {Folder, IFolder} from "jrss-db";
+import {IFolder} from "jrss-db";
 import * as lib from './foldersLib'
 import express = require('express')
 
@@ -16,18 +16,23 @@ router.get("/", async (req,res) => {
     res.status(200);
 })
 
-router.post("/", (req,res) => {
-
+router.post("/", async (req,res) => {
+    let newFolder:IFolder = await lib.createFolder(req.user._id,req.body.json)
+    res.status(201)
+    res.json(newFolder)
 })
 
-router.get("/:folderid", (req,res) => {
-
+router.get("/:folderid", async (req,res) => {
+    let folder:IFolder = await lib.getFolder(req.user._id,req.params.folderid)
+    res.json(folder)
 })
-router.patch("/:folderid", (req,res) => {
-
+router.patch("/:folderid", async (req,res) => {
+    let patched:IFolder = await lib.patchFolder(req.user._id,req.params.folderid,req.body.json);
+    res.json(patched)
 })
-router.delete("/:folderid", (req,res) => {
-
+router.delete("/:folderid", async (req,res) => {
+    let deleted:IFolder = await lib.deleteFolder(req.user._id, req.params.folderid)
+    res.json(deleted)
 })
 
 export {router}

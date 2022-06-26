@@ -4,6 +4,11 @@ import * as rss from 'rss-handler'
 
 const router = express.Router()
 
+router.all("/*", (req, res, next) => {
+    if (!req.user) return res.sendStatus(401);
+    next();
+})
+
 // FEEDS
 router.get('/feeds', async (req, res, next) => {//get list of feeds (and basic info for feed)
     if (!req.user) return res.sendStatus(401);

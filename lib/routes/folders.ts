@@ -5,7 +5,7 @@ import express = require('express')
 const router = express.Router();
 
 //add auth to all routes and subroutes of /folders
-router.all("/(.*)", (req, res, next) => {
+router.all("/*", (req, res, next) => {
     if (!req.user) return res.sendStatus(401);
     next();
 })

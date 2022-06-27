@@ -2,6 +2,7 @@ import * as lib from 'routes/feedsLib'
 import * as assert from 'assert'
 import {Document, Types} from "mongoose";
 import {Article,Feed,IArticle, IFeed} from 'jrss-db'
+import {FeedInitializer} from "routes/feedsLib";
 
 const USERID:Types.ObjectId = Types.ObjectId("000000000000000000000000");
 
@@ -11,6 +12,11 @@ describe("feedsLib tests", () => {
         link: "url",
         title: "sample title feedsLib",
         userid: USERID
+    }
+    const sampleFeedInit:FeedInitializer = {
+        description: "sample desc",
+        link: "url",
+        title: "Sample Title"
     }
     describe("getFeedsUnread", () => {
         it("should return empty list if there are no feeds", async () => {
@@ -36,6 +42,12 @@ describe("feedsLib tests", () => {
             await Article.create(article);
             let unread = (await lib.getFeedsUnread(USERID))[0]
             assert(unread.unread == 1)
+        })
+    })
+    describe("createFeed", () => {
+        it("should return the new IFeed object on creation", async () => {
+            let newFeed = await lib.createFeed(USERID,sampleFeedInit)
+            assert(newFeed.title == sampleFeedInit.title)
         })
     })
     after(async () => {

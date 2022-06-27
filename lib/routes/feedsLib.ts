@@ -1,4 +1,4 @@
-import {Article, Feed} from "jrss-db";
+import {Article, Feed, IFeed} from "jrss-db";
 import {Types} from 'mongoose'
 import {logger} from 'logging'
 
@@ -8,6 +8,14 @@ type FeedUnread = {
     shortTitle?:string,
     folderid?:Types.ObjectId,
     unread:number
+}
+
+type FeedInitializer = Omit<IFeed,"userid">
+
+async function createFeed(userid:Types.ObjectId, newFeed:FeedInitializer) {
+    logger.debug(`${userid} creating new feed, url: ${newFeed.link}`)
+    logger.trace(`${userid} create new feed: \n\t\t${JSON.stringify(newFeed)}`)
+    return Feed.create({userid:userid, ...newFeed})
 }
 
 async function getFeedsUnread(userid:Types.ObjectId):Promise<FeedUnread[]>{
@@ -47,5 +55,7 @@ async function getUnread(userid:Types.ObjectId) {
 }
 
 export {
-    getFeedsUnread
+    FeedInitializer,
+    getFeedsUnread,
+    createFeed
 }

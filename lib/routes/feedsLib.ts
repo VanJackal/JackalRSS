@@ -13,13 +13,14 @@ type FeedUnread = {
 async function getFeedsUnread(userid:Types.ObjectId):Promise<FeedUnread[]>{
     let feedsData = await Feed.find({ userid: userid }, { _id: 1, title: 1, folderid: 1, shortTitle:1 }).exec()
     const numUnread = await getUnread(userid)
-    logger.trace(`${userid} getting unread feeds:`)
-    console.log(numUnread)
+
+    logger.debug(`${userid} getting unread feeds:\n\t\t` + JSON.stringify(numUnread))
+
     return feedsData.map((feed) => {
         let unread:{_id:Types.ObjectId,count:number} = numUnread.find((feedUnread) => {
             return feed._id.equals(feedUnread._id)
         })
-        logger.trace(`${userid} unread for feed-${feed._id}: ${unread}`)
+        logger.trace(`${userid} unread for feed-${feed._id}: ${JSON.stringify(unread)}`)
 
         return {//using ...feed creates unwanted results
             _id:feed._id,

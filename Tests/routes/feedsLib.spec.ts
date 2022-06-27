@@ -20,7 +20,6 @@ describe("feedsLib tests", () => {
         it("should return unread == 0 on empty list", async () => {
             feed = await Feed.create(sampleFeed)
             let unread = (await lib.getFeedsUnread(USERID))[0]
-            console.log(unread)
             assert(unread.unread == 0)
         })
         it("should have correct number of unread when articles are added",async () => {
@@ -36,7 +35,6 @@ describe("feedsLib tests", () => {
             article.read = true
             await Article.create(article);
             let unread = (await lib.getFeedsUnread(USERID))[0]
-            console.log(unread)
             assert(unread.unread == 1)
         })
     })

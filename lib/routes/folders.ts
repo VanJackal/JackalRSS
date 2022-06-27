@@ -17,7 +17,7 @@ router.get("/", async (req,res) => {
 })
 
 router.post("/", async (req,res) => {
-    let newFolder:IFolder = await lib.createFolder(req.user._id,req.body.json)
+    let newFolder:IFolder = await lib.createFolder(req.user._id,req.body)
     res.status(201)
     res.json(newFolder)
 })
@@ -27,7 +27,7 @@ router.get("/:folderid", async (req,res) => {
     res.json(folder)
 })
 router.patch("/:folderid", async (req,res) => {
-    let patched:IFolder = await lib.patchFolder(req.user._id,req.params.folderid,req.body.json);
+    let patched:IFolder = await lib.patchFolder(req.user._id,req.params.folderid,req.body);
     res.json(patched)
 })
 router.delete("/:folderid", async (req,res) => {

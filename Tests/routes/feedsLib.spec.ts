@@ -50,6 +50,15 @@ describe("feedsLib tests", () => {
             assert(newFeed.title == sampleFeedInit.title)
         })
     })
+    describe("patchFeed", () => {
+
+    })
+    describe("getFeed", () => {
+
+    })
+    describe("getFeedArticles",() => {
+
+    })
     after(async () => {
         await Feed.deleteMany({userid:USERID})
     })

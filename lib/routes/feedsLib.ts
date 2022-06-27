@@ -1,4 +1,4 @@
-import {Article, Feed, IFeed} from "jrss-db";
+import {Article, Feed, IArticle, IFeed} from "jrss-db";
 import {Types} from 'mongoose'
 import {logger} from 'logging'
 
@@ -12,7 +12,7 @@ type FeedUnread = {
 
 type FeedInitializer = Omit<IFeed,"userid">
 
-async function createFeed(userid:Types.ObjectId, newFeed:FeedInitializer) {
+async function createFeed(userid:Types.ObjectId, newFeed:FeedInitializer):Promise<IFeed> {
     logger.debug(`${userid} creating new feed, url: ${newFeed.link}`)
     logger.trace(`${userid} create new feed: \n\t\t${JSON.stringify(newFeed)}`)
     return Feed.create({userid:userid, ...newFeed})
@@ -40,6 +40,22 @@ async function getFeedsUnread(userid:Types.ObjectId):Promise<FeedUnread[]>{
     })
 }
 
+async function patchFeed(userid:Types.ObjectId, feedid:Types.ObjectId, changes:Partial<IFeed>):Promise<IFeed> {
+    logger.debug(`${userid} patching feed(${feedid})`)
+    logger.trace(`${userid} patching feed(${feedid}) with:\n\t\t${JSON.stringify(changes)}`)
+    return Feed.findOneAndUpdate({ _id: feedid, userid: userid }, changes)
+}
+
+async function getFeed(userid:Types.ObjectId, feedid:Types.ObjectId):Promise<IFeed>{
+    logger.debug(`${userid} getting feed: ${feedid}`)
+    return Feed.findOne({_id:feedid, userid:userid})
+}
+
+async function getFeedArticles(userid:Types.ObjectId, feedid:Types.ObjectId):Promise<Partial<IArticle>[]> {
+    logger.debug(`${userid} getting article details for ${feedid}`)
+    return Article.find({ feedid: feedid, userid: userid}, { title: 1, pubDate: 1, read: 1 })
+}
+
 async function getUnread(userid:Types.ObjectId) {
     return Article.aggregate([
         {
@@ -57,5 +73,8 @@ async function getUnread(userid:Types.ObjectId) {
 export {
     FeedInitializer,
     getFeedsUnread,
-    createFeed
+    createFeed,
+    patchFeed,
+    getFeed,
+    getFeedArticles
 }

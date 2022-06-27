@@ -1,5 +1,4 @@
 import express = require('express')
-import {Feed, Article} from "jrss-db";
 import * as rss from 'rss-handler'
 import * as lib from './feedsLib'
 
@@ -36,16 +35,19 @@ router.post('/:feedid', async (req, res) => {//fetch new entries for the feed wi
     }
 });
 
-router.patch('/:feedid', (req, res) => {//update feed entry
-    Feed.findOneAndUpdate({ _id: req.params.feedid, userid: req.user._id }, req.body).then(data => res.json(data));
+router.patch('/:feedid', async (req, res) => {//update feed entry
+    let updated = await lib.patchFeed(req.user._id, req.params.feedid, req.body)
+    res.json(updated)
 });
 
-router.get('/:feedid', (req, res) => {//get feed entry
-    Feed.findOne({ _id: req.params.feedid, userid: req.user._id }).then(data => res.json(data));
+router.get('/:feedid', async (req, res) => {//get feed entry
+    let feed = await lib.getFeed(req.user._id, req.params.feedid)
+    res.json(feed)
 });
 
-router.get('/:feedid/articles', (req, res) => { // Gets the list of articles for the feed with shortened info
-    Article.find({ feedid: req.params.feedid, userid: req.user._id }, { title: 1, pubDate: 1, read: 1 }).then(data => res.json(data));
+router.get('/:feedid/articles', async (req, res) => { // Gets the list of articles for the feed with shortened info
+    let articles = await lib.getFeedArticles(req.user._id, req.params.feedid)
+    res.json(articles)
 });
 
 router.delete('/:feedid', async (req, res) => {//Remove feed and its connected articles

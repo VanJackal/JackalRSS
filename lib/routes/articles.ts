@@ -2,18 +2,20 @@ import express = require('express')
 import {isValidObjectId} from "mongoose";
 import {logger} from 'logging'
 import * as lib from './articlesLib'
+import {requireAuth} from "./middleware";
 
 const router = express.Router()
 
 /**
  * handle verification and ensure id param and userid are valid
  */
-router.all('/:id', (req,res,next) => {
-    if (!req.user) return res.sendStatus(401);
+router.all('/:id',requireAuth, (req,res,next) => {
     //check if the ids are valid send 400 if not
-    if (!(isValidObjectId(req.params.id) && isValidObjectId(req.user._id))) {
-        logger.trace(`GET articles/:id invalid userid(${req.user._id}) or articleid(${req.params.id})`)
-        res.message = "Invalid Userid or articleId"
+    if (!(isValidObjectId(req.params.id))) {
+        logger.trace(`articles/:id invalid articleid(${req.params.id})`)
+        res.json({
+            message:"Invalid articleId"
+        })
         return res.sendStatus(400);
     }
     next()

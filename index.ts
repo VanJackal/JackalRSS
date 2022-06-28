@@ -28,6 +28,11 @@ app.use(session({
 app.use(passport.initialize({}));
 app.use(passport.session({}));
 
+app.use('*',(req,res,next) => {
+    logger.trace(`request @ ${req.originalUrl}`)
+    next()
+})
+
 app.use('/api/articles', ArticlesRouter);
 app.use('/api/feeds', FeedsRouter);
 app.use('/api/util', UtilRouter);

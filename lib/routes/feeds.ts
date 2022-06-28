@@ -1,15 +1,15 @@
 import express = require('express')
 import * as rss from 'rss-handler'
 import * as lib from './feedsLib'
+import {requireAuth} from "./middleware";
+import {isValidObjectId} from "mongoose";
+import {logger} from 'logging'
 
 const router = express.Router()
 
-router.all("/*", (req, res, next) => {
-    if (!req.user) return res.sendStatus(401);
-    next();
-})
+router.all("/*", requireAuth)
 
-// FEEDS
+// /feeds
 router.get('/', async (req, res) => {//get list of feeds (and basic info for feed)
     let feeds = lib.getFeedsUnread(req.user._id)
     res.json(feeds);
@@ -19,6 +19,17 @@ router.post('/', async (req, res) => {//add a new feed
     let newFeed = await lib.createFeed(req.user._id,req.body)
     res.status(201)
     res.json(newFeed)
+})
+
+// /feeds/:feedid
+
+router.all("/:feedid/*",(req, res, next) => {
+    if(isValidObjectId(req.params.feedid)) {
+        next()
+    } else {
+        logger.trace("Invalid feedid @ " + req.originalUrl)
+        res.status(400)
+    }
 })
 
 router.post('/:feedid', async (req, res) => {//fetch new entries for the feed with 'feedid'
@@ -45,15 +56,15 @@ router.get('/:feedid', async (req, res) => {//get feed entry
     res.json(feed)
 });
 
-router.get('/:feedid/articles', async (req, res) => { // Gets the list of articles for the feed with shortened info
-    let articles = await lib.getFeedArticles(req.user._id, req.params.feedid)
-    res.json(articles)
-});
-
 router.delete('/:feedid', async (req, res) => {//Remove feed and its connected articles
     let removed = rss.removeFeed(req.params.feedid, req.user._id)
     res.json(removed)
 })
+
+router.get('/:feedid/articles', async (req, res) => { // Gets the list of articles for the feed with shortened info
+    let articles = await lib.getFeedArticles(req.user._id, req.params.feedid)
+    res.json(articles)
+});
 
 export {
     router

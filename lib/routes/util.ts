@@ -6,7 +6,7 @@ import {logger} from 'logging'
 const router = express.Router()
 
 //UTIL
-router.post('/util/feeds/info', async (req, res) => { //gets the info from an rss feed
+router.post('/feeds/info', async (req, res) => { //gets the info from an rss feed
     logger.debug(`Getting feed info for ${req.body.url}`)
     try {
         let feedInfo = await rss.getFeedInfo(req.body.url)
@@ -19,12 +19,12 @@ router.post('/util/feeds/info', async (req, res) => { //gets the info from an rs
     }
 })
 
-router.post('/util/feeds/refresh', (req, res) =>{
+router.post('/feeds/refresh', (req, res) =>{
     if (!req.user) return res.sendStatus(401);
     rss.refreshAll(req.user._id).then((data) => res.json(data));
 })
 
-router.get('/util/feeds/folders',async (req, res) => {//TODO this needs to be moved to a folders.ts route file
+router.get('/feeds/folders',async (req, res) => {//TODO this needs to be moved to a folders.ts route file
     if (!req.user) return res.sendStatus(401);
     logger.error('GET /util/feeds/folders -> route not properly implemented')
     const foldersObj = await Feed.aggregate([

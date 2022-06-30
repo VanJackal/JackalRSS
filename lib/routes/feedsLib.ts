@@ -24,7 +24,7 @@ async function getFeedsUnread(userid:Types.ObjectId):Promise<FeedUnread[]>{
 
     logger.debug(`${userid} getting unread feeds:\n\t\t` + JSON.stringify(numUnread))
 
-    return feedsData.map((feed) => {
+    let feeds = feedsData.map((feed) => {
         let unread:{_id:Types.ObjectId,count:number} = numUnread.find((feedUnread) => {
             return feed._id.equals(feedUnread._id)
         })
@@ -38,6 +38,8 @@ async function getFeedsUnread(userid:Types.ObjectId):Promise<FeedUnread[]>{
             folderid:feed.folderid,
         }
     })
+    logger.trace(JSON.stringify(`${userid} Got FeedUnreads: \n\t\t${JSON.stringify(feeds)}`))
+    return feeds
 }
 
 async function patchFeed(userid:Types.ObjectId, feedid:Types.ObjectId, changes:Partial<IFeed>):Promise<IFeed> {

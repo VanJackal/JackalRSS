@@ -11,7 +11,8 @@ router.all("/*", requireAuth)
 
 // /feeds
 router.get('/', async (req, res) => {//get list of feeds (and basic info for feed)
-    let feeds = lib.getFeedsUnread(req.user._id)
+    let feeds = await lib.getFeedsUnread(req.user._id)
+    logger.trace(`${req.method} ${req.originalUrl} res:\n\t\t${JSON.stringify(feeds)}`)
     res.json(feeds);
 });
 

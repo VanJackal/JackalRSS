@@ -8,7 +8,7 @@ async function getArticleFromId(articleID:Types.ObjectId, userID:Types.ObjectId)
 }
 
 async function patchArticleFromId(articleID:Types.ObjectId, userID:Types.ObjectId, changes:Partial<IArticle>):Promise<IArticle>{
-    logger.debug(`User(${userID}) patching ${articleID} with ${changes}`)
+    logger.debug(`User(${userID}) patching ${articleID} with ${JSON.stringify(changes)}`)
     return Article.findOneAndUpdate({userid:userID,_id:articleID},changes)
 }
 

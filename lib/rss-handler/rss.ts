@@ -67,7 +67,7 @@ function getArticle(feedid:Types.ObjectId, item: { [p: string]: any } & Parser.I
 		feedid: feedid,
 		title: item.title || "Title Not Found",
 		description: item.content || item.summary || "Description Not Found",//TODO Change this so its assigned to a var beforehand
-		pubDate: (item?.pubDate ? new Date(item.pubDate) : null),
+		pubDate: (item?.pubDate ? new Date(item.pubDate) : new Date()),
 		link: item?.link,
 		enclosure: item?.enclosure,
 		uuid: uuid,

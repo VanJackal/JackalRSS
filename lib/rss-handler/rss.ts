@@ -87,7 +87,12 @@ async function fetchFeed(feedid,userid):Promise<number> {
 	logger.trace(`fetchFeed(${feedid}, ${userid})`)
 	let url = (await Feed.findOne({_id:feedid,userid:userid},{link:1})).link;
 	logger.debug(`(${userid}) Fetching ${feedid}(${url})`);
-	let feed = await parser.parseURL(url);
+	let feed;
+	try {
+		feed = await parser.parseURL(url);
+	} catch (e) {
+		return 0;//TODO improve the structure of this file to return more details on success/fail
+	}
 	logger.trace(`(${userid}) parsed ${url}(${feedid}) - Title: ${feed.title}`)
 	let articles:IArticle[] = [];
 	let uuids = [];

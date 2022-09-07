@@ -20,7 +20,11 @@ router.post('/feeds/info', async (req, res) => { //gets the info from an rss fee
 
 router.post('/feeds/refresh', (req, res) =>{
     if (!req.user) return res.sendStatus(401);
-    rss.refreshAll(req.user._id).then((data) => res.json(data));
+    try {
+        rss.refreshAll(req.user._id).then((data) => res.json(data));
+    } catch (e) {
+        res.sendStatus(500)
+    }
 })
 
 export {

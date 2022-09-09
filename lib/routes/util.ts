@@ -1,6 +1,8 @@
 import express = require('express')
 import rss = require('rss-handler')
 import {logger} from 'logging'
+import {requireAuth} from "./middleware";
+import * as lib from "./utilLib"
 
 const router = express.Router()
 
@@ -25,6 +27,11 @@ router.post('/feeds/refresh', (req, res) =>{
     } catch (e) {
         res.sendStatus(500)
     }
+})
+
+router.get('/sidebar', requireAuth, async (req, res) => {
+    let sidebarData = await lib.getSidebar(req.user._id)
+    res.json(sidebarData)
 })
 
 export {

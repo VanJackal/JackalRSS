@@ -1,4 +1,4 @@
-import {Folder,IFolder} from "jrss-db";
+import {Folder, IFolder} from "jrss-db";
 import * as assert from "assert"
 import {Types} from "mongoose";
 import {createFolder, getFolders, getFolder, deleteFolder, patchFolder} from "routes/foldersLib";
@@ -77,5 +77,8 @@ describe("foldersLib tests", ()=>{
             assert(found)
             assert(found.name == sampleFolder.name)
         })
+    })
+    after(async () => {
+        await Folder.deleteMany({userid:USERID})
     })
 })

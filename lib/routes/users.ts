@@ -24,7 +24,6 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 
 router.post('/logout', (req, res) => {
     logger.trace("users/logout called")
-    console.log(req)
     let msg = `Logged out ${req.user?.username || "[Not Logged In]"}`;
     if (req.user) logger.info(`${req.user?.username} logged out`);
     req.logout();

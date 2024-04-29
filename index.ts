@@ -28,7 +28,7 @@ app.use(session({
 app.use(passport.initialize({}));
 app.use(passport.session({}));
 
-app.use('*',(req,res,next) => {
+app.use((req,res,next) => {
     logger.trace(`request: ${req.method} ${req.originalUrl}`)
     next()
 })

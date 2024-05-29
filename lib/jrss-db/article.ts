@@ -1,4 +1,5 @@
 import {model , Schema, Types} from "mongoose"
+import {Enclosure} from "types/rss";
 
 interface IArticle{
 	feedid:Types.ObjectId,
@@ -6,7 +7,7 @@ interface IArticle{
 	description:string,
 	pubDate?:Date,
 	link?:string,
-	enclosure?:object,
+	enclosure?:Enclosure,
 	content?:string,
 	uuid:string,
 	read:boolean,

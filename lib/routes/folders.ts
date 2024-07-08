@@ -11,14 +11,14 @@ const router = express.Router();
 router.all("/*", requireAuth)
 
 // folders/
-router.get("/", async (req,res) => {
+router.get("/", requireAuth, async (req,res) => {
     let folders:IFolder[] = await lib.getFolders(req.user._id);
     res.json(folders);
     res.status(200);
 })
 
-router.post("/", async (req,res) => {
-    let newFolder:IFolder = await lib.createFolder(req.user._id,req.body)
+router.post("/", requireAuth, async (req,res) => {
+    let newFolder:IFolder = await lib.createFolder(req.user._id, req.body.name, req.body.shortName, req.body.parent)
     res.status(201)
     res.json(newFolder)
 })

@@ -20,27 +20,35 @@ async function createFeed(userid:Types.ObjectId, newFeed:FeedInitializer):Promis
 
 //todo rewrite this to use an aggregate
 async function getFeedsUnread(userid:Types.ObjectId, folderId=null):Promise<FeedUnread[]>{
-    let feedsData = await Feed.find({ userid: userid, folderid: folderId }, { _id: 1, title: 1, folderid: 1, shortTitle:1 }).exec()
-    const numUnread = await getUnread(userid)
+    const numUnread = await Feed.aggregate([
+        {$match:{userid:userid, folderid:folderId}},
+        {$lookup:{
+                from: "articles",
+                let:{feed:"$_id"},
+                pipeline:[{
+                    $match:{$expr:{
+                        $and:[
+                            {$eq:["$userid", userid]},
+                            {$eq:["$$feed","$feedid"]},
+                            {$eq:["$read", false]}
+                        ]
+                        }}
+                }],
+                as:"unreadArticles"
+            }},//left join matching articles
+        {$project:{
+                _id:1,
+                unread:{$size:"$unreadArticles"},
+                title:1,
+                shortTitle:1,
+                folderid:1
+            }} // count number of unread articles and project the correct fields
+    ])
 
     logger.debug(`${userid} getting unread feeds:\n\t\t` + JSON.stringify(numUnread))
 
-    let feeds = feedsData.map((feed) => {
-        let unread:{_id:Types.ObjectId,count:number} = numUnread.find((feedUnread) => {
-            return feed._id.equals(feedUnread._id)
-        })
-        logger.trace(`${userid} unread for feed-${feed._id}: ${JSON.stringify(unread)}`)
-
-        return {//using ...feed creates unwanted results
-            _id:feed._id,
-            unread:unread?.count || 0,
-            title: feed.title,
-            shortTitle:feed.shortTitle,
-            folderid:feed.folderid,
-        }
-    })
-    logger.trace(JSON.stringify(`${userid} Got FeedUnreads: \n\t\t${JSON.stringify(feeds)}`))
-    return feeds
+    logger.trace(JSON.stringify(`${userid} Got FeedUnreads: \n\t\t${JSON.stringify(numUnread)}`))
+    return numUnread
 }
 
 async function patchFeed(userid:Types.ObjectId, feedid:Types.ObjectId, changes:Partial<IFeed>):Promise<IFeed> {
@@ -57,20 +65,6 @@ async function getFeed(userid:Types.ObjectId, feedid:Types.ObjectId):Promise<IFe
 async function getFeedArticles(userid:Types.ObjectId, feedid:Types.ObjectId):Promise<Partial<IArticle>[]> {
     logger.debug(`${userid} getting article details for ${feedid}`)
     return Article.find({ feedid: feedid, userid: userid}, { title: 1, pubDate: 1, read: 1 })
-}
-
-async function getUnread(userid:Types.ObjectId) {
-    return Article.aggregate([
-        {
-            "$match": { userid: userid, read: false }
-        },
-        {
-            "$group": {
-                _id: "$feedid",
-                count: { "$sum": 1 }
-            }
-        }
-    ]);
 }
 
 export {

@@ -2,7 +2,7 @@ import {Article, Feed, IArticle, IFeed} from "jrss-db";
 import {Types} from 'mongoose'
 import {logger} from 'logging'
 
-type FeedUnread = {
+export type FeedUnread = {
     _id:Types.ObjectId,
     title:string,
     shortTitle?:string,
@@ -18,6 +18,8 @@ async function createFeed(userid:Types.ObjectId, newFeed:FeedInitializer):Promis
     return Feed.create({userid:userid, ...newFeed})
 }
 
+//todo rewrite this to use an aggregate
+//todo change this to except an optional arg for parent
 async function getFeedsUnread(userid:Types.ObjectId):Promise<FeedUnread[]>{
     let feedsData = await Feed.find({ userid: userid }, { _id: 1, title: 1, folderid: 1, shortTitle:1 }).exec()
     const numUnread = await getUnread(userid)

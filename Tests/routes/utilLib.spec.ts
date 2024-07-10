@@ -11,7 +11,8 @@ describe("Util Tests",() => {
     let sampleFolder1:IFolder;
     describe("getSidebar Tests", () => {
         it("return falsy for empty db", async () => {
-            assert(!(await getSidebar(USERID))?.length)
+            const sidebar = await getSidebar(USERID)
+            assert(!sidebar.feeds.length && !sidebar.folders.length)
         })
         it("should truthy for db with items", async () => {
             sampleFolder = {name: "folder", userid: USERID}
@@ -24,9 +25,11 @@ describe("Util Tests",() => {
             await Feed.create(sampleFeed)
             await Folder.create(sampleFolder1)
 
-            assert((await getSidebar(USERID))?.length)
+            const sidebar = await getSidebar(USERID)
+            assert(sidebar.feeds.length + sidebar.folders.length > 0)
         })
-        it("should return a tree of SidebarItem's")
+        it("should return the top level items")
+        it("should return child items of a folder")
     })
     after(() => {
         Feed.deleteMany({});

@@ -11,7 +11,7 @@ describe("Util Tests",() => {
     let sampleFolder1:IFolder;
     describe("getSidebar Tests", () => {
         it("return falsy for empty db", async () => {
-            const sidebar = await getSidebar(USERID)
+            const sidebar = await getSidebar(USERID,null)
             assert(!sidebar.feeds.length && !sidebar.folders.length)
         })
         it("should truthy for db with items", async () => {
@@ -25,7 +25,7 @@ describe("Util Tests",() => {
             await Feed.create(sampleFeed)
             await Folder.create(sampleFolder1)
 
-            const sidebar = await getSidebar(USERID)
+            const sidebar = await getSidebar(USERID,null)
             assert(sidebar.feeds.length + sidebar.folders.length > 0)
         })
         it("should return the top level items")

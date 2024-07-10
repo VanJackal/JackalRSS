@@ -30,7 +30,7 @@ router.post('/feeds/refresh', (req, res) =>{
 })
 
 router.get('/sidebar', requireAuth, async (req, res) => {
-    let sidebarData = await lib.getSidebar(req.user._id)
+    let sidebarData = await lib.getSidebar(req.user._id, req.query.folder)
     res.json(sidebarData)
 })
 

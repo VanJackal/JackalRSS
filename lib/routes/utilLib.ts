@@ -9,10 +9,10 @@ type Sidebar = {
     feeds:FeedUnread[]
 }
 
-async function getSidebar(userid:Types.ObjectId):Promise<Sidebar> {
+async function getSidebar(userid:Types.ObjectId, folderId:Types.ObjectId):Promise<Sidebar> {
     logger.debug(`${userid} Getting sidebar`)
-    const foldersP = getFolders(userid)
-    const feedsP = getFeedsUnread(userid)
+    const foldersP = getFolders(userid, folderId)
+    const feedsP = getFeedsUnread(userid, folderId)
 
     return {
         folders: await foldersP,

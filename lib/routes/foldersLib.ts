@@ -2,9 +2,9 @@ import {Folder, IFolder} from "jrss-db";
 import {Types} from 'mongoose'
 import {logger} from 'logging'
 
-async function getFolders(userid):Promise<IFolder[]>{
+async function getFolders(userid, parent = null):Promise<IFolder[]>{
     logger.trace(`Getting folders for ${userid}`)
-    return Folder.find({userid:userid})
+    return Folder.find({userid:userid, parent:parent})
 }
 
 async function createFolder(userid:Types.ObjectId, name:string, shortName:string = null, parent:Types.ObjectId = null): Promise<IFolder> {

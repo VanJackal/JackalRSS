@@ -19,9 +19,8 @@ async function createFeed(userid:Types.ObjectId, newFeed:FeedInitializer):Promis
 }
 
 //todo rewrite this to use an aggregate
-//todo change this to except an optional arg for parent
-async function getFeedsUnread(userid:Types.ObjectId):Promise<FeedUnread[]>{
-    let feedsData = await Feed.find({ userid: userid }, { _id: 1, title: 1, folderid: 1, shortTitle:1 }).exec()
+async function getFeedsUnread(userid:Types.ObjectId, folderId=null):Promise<FeedUnread[]>{
+    let feedsData = await Feed.find({ userid: userid, folderid: folderId }, { _id: 1, title: 1, folderid: 1, shortTitle:1 }).exec()
     const numUnread = await getUnread(userid)
 
     logger.debug(`${userid} getting unread feeds:\n\t\t` + JSON.stringify(numUnread))

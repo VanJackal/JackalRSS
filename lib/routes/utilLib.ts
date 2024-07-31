@@ -9,6 +9,11 @@ type Sidebar = {
     feeds:FeedUnread[]
 }
 
+/**
+ * get the children of folderId in the sidebar (folders and feeds)
+ * @param userid id of the user to get
+ * @param folderId id of the parent folder
+ */
 async function getSidebar(userid:Types.ObjectId, folderId:Types.ObjectId):Promise<Sidebar> {
     logger.debug(`${userid} Getting sidebar`)
     const foldersP = getFolders(userid, folderId)
